@@ -2,22 +2,31 @@ package study.datajpa.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id","username","age"})
 public class Member {
 
     @Id @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
-
     private String username;
+    private int age;
+
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     public Member(String username) {
         this.username = username;
     }
 
+    public void changeTeam(Team team){
+        this.team = team;
+        team.getMembers().add(this);
+    }
 }
